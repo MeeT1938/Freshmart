@@ -1,0 +1,379 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --primary-color: #27ae60;
+    --accent-color: #f1c40f;
+    --dark-blue: #2c3e50;
+    --light-bg: #f4f9f4;
+    --white: #ffffff;
+    --shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+body { background-color: var(--light-bg); color: var(--dark-blue); }
+
+/* --- HEADER & NAV --- */
+header {
+    background: linear-gradient(-45deg, #2ecc71, #27ae60, #1abc9c, #16a085); 
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .logo h1 {
+    color: #ffffff; 
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+}
+
+header .logo i {
+    color: #ffffff;
+    margin-right: 8px;
+}
+
+nav a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    margin-left: 25px;
+    font-size: 1rem;
+    transition: 0.3s ease;
+    padding: 8px 15px;
+    border-radius: 20px;
+}
+
+nav a:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+nav a.active {
+    background: #ffffff;
+    color: #27ae60;
+}
+
+/* --- HERO SECTION --- */
+/* --- HERO SECTION --- */
+/* --- HERO SECTION --- */
+.hero {
+    height: 500px;
+    /* અહીં મેં main.jpg લિંક કરી દીધી છે */
+    background: linear-gradient(45deg, rgba(39, 174, 96, 0.8), rgba(44, 62, 80, 0.8)), 
+                url('./main.jpg'); 
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding: 20px;
+}
+.hero h1 { font-size: 3.5rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.3); }
+
+.cta-btn {
+    background: var(--accent-color);
+    color: var(--dark-blue);
+    padding: 15px 40px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    margin-top: 20px;
+    display: inline-block;
+    transition: 0.3s;
+}
+.cta-btn:hover { transform: scale(1.05); background: var(--white); }
+
+/* --- PRODUCT PAGE LAYOUT --- */
+.main-container {
+    display: flex;
+    padding: 40px 5%;
+    gap: 30px;
+    justify-content: center;
+}
+
+.sidebar {
+    width: 260px;
+    background: var(--white);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    height: fit-content;
+}
+
+.sidebar button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 8px;
+    text-align: left;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.4s; /* Hover transition */
+}
+
+/* --- SIDEBAR BUTTON HOVER --- */
+.sidebar button:hover { 
+    background: var(--primary-color); 
+    color: white; 
+    transform: translateX(8px); /* સહેજ જમણી બાજુ ખસશે */
+}
+
+.products-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.product-card {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: 0.4s ease; /* Transition update */
+    border: 1px solid transparent;
+}
+
+/* --- PRODUCT CARD HOVER --- */
+.product-card:hover { 
+    transform: translateY(-10px); /* સહેજ વધારે ઉપર આવશે */
+    border-color: var(--primary-color); /* બોર્ડર ગ્રીન થશે */
+    box-shadow: 0 10px 25px rgba(39, 174, 96, 0.2); /* ગ્રીન શેડો */
+}
+
+.product-card img { 
+    width: 100%; 
+    height: 150px; 
+    object-fit: contain; 
+    margin-bottom: 15px; 
+    transition: 0.4s;
+}
+
+/* Image zoom on hover */
+.product-card:hover img {
+    transform: scale(1.1);
+}
+
+.price { color: var(--primary-color); font-weight: 700; font-size: 1.2rem; display: block; margin: 10px 0; }
+
+/* --- INFO & FOOTER --- */
+.info-section { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 30px; 
+    padding: 60px 10%; 
+    text-align: center; 
+}
+
+/* Info Box Icon Hover */
+.info-section i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    transition: 0.5s;
+    display: inline-block;
+}
+
+.info-section div:hover i {
+    transform: rotateY(360deg); /* આઈકન ગોળ ફરશે */
+}
+
+footer { background: var(--dark-blue); color: white; padding: 30px; text-align: center; margin-top: 50px; }
+
+/* Responsive Grid */
+@media (max-width: 1100px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 768px) { 
+    .main-container { flex-direction: column; align-items: center; } 
+    .products-grid { grid-template-columns: repeat(1, 1fr); } 
+}
+/* --- INDEX PAGE BOX HOVER & ABOUT SECTION ALIGNMENT --- */
+
+/* 1. Info Boxes Hover (Index Page) */
+.info-section div {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    transition: all 0.4s ease;
+    cursor: default;
+}
+
+.info-section div:hover {
+    transform: translateY(-10px); /* બોક્સ ઉપર આવશે */
+    background: linear-gradient(to bottom, var(--white), #e8f5e9); /* હલકો ગ્રીન શેડ */
+    box-shadow: 0 10px 20px rgba(39, 174, 96, 0.15);
+}
+
+/* 2. About FreshMart Alignment Fix */
+.about-brief {
+    max-width: 900px;
+    margin: 40px auto; /* સેન્ટરમાં લાવવા માટે */
+    padding: 40px;
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    border-left: 5px solid var(--primary-color); /* સાઈડમાં પ્રોફેશનલ બોર્ડર */
+    transition: 0.3s ease;
+}
+
+.about-brief:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.about-brief h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 2rem;
+}
+
+.about-brief p {
+    line-height: 1.8;
+    color: var(--dark-blue);
+    font-size: 1.05rem;
+}
+
+/* 3. Button Shake Effect (Optional) */
+.cta-btn:hover {
+    animation: simple-shake 0.5s;
+}
+
+@keyframes simple-shake {
+    0% { transform: scale(1.05) rotate(0deg); }
+    25% { transform: scale(1.05) rotate(1deg); }
+    50% { transform: scale(1.05) rotate(-1deg); }
+    100% { transform: scale(1.05) rotate(0deg); }
+}
+/* --- ADMIN PANEL STYLES --- */
+.admin-body { background: #f0f2f5; }
+
+.admin-container { display: flex; min-height: 100vh; }
+
+.admin-sidebar {
+    width: 250px;
+    background: var(--dark-blue);
+    color: white;
+    padding: 30px 20px;
+}
+
+.admin-sidebar h2 { margin-bottom: 30px; font-size: 1.5rem; color: var(--primary-color); }
+
+.admin-sidebar ul { list-style: none; }
+
+.admin-sidebar li {
+    padding: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.admin-sidebar li:hover, .admin-sidebar li.active { background: var(--primary-color); }
+
+.admin-main { flex: 1; padding: 40px; }
+
+.admin-form-section {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    margin-bottom: 40px;
+}
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.admin-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Table Style */
+table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); }
+th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+th { background: #f8f9fa; color: var(--dark-blue); }
+
+.delete-btn { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+/* --- ADMIN PAGE SPECIAL STYLES --- */
+.admin-body { background: #f0f2f5; }
+.admin-container { display: flex; min-height: 100vh; }
+
+.admin-sidebar { width: 250px; background: #2c3e50; color: white; padding: 30px 20px; }
+.admin-sidebar h2 { color: #27ae60; margin-bottom: 30px; }
+.admin-sidebar ul { list-style: none; }
+.admin-sidebar li { padding: 15px; cursor: pointer; transition: 0.3s; border-radius: 8px; margin-bottom: 5px; }
+.admin-sidebar li:hover, .admin-sidebar li.active { background: #27ae60; }
+
+.admin-main { flex: 1; padding: 30px; }
+.admin-tab-content { display: none; }
+.admin-tab-content.active { display: block; }
+
+.admin-form-section { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 30px; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+.form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+
+.admin-btn { background: #27ae60; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+
+/* Table Styling */
+.admin-table-section table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; }
+.admin-table-section th, .admin-table-section td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+.admin-table-section th { background: #f8f9fa; }
+
+/* Status Styles */
+.status-pending { background: #fff3cd; color: #856404; padding: 5px 10px; border-radius: 15px; font-size: 0.8rem; }
+.status-delivered { background: #d4edda; color: #155724; padding: 5px 10px; border-radius: 15px; font-size: 0.8rem; }
+.status-btn { background: #2c3e50; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+/* --- About Section Styling (Centered & Hover) --- */
+.about-brief {
+    padding: 60px 20px;
+    text-align: center;      /* લખાણ સેન્ટરમાં કરવા માટે */
+    max-width: 900px;        /* સેક્શનની પહોળાઈ સેટ કરવા માટે */
+    margin: 40px auto;       /* સેક્શનને આખા પેજની વચ્ચે (Center) રાખવા માટે */
+     background: linear-gradient(-45deg, #2ecc71, #27ae60, #1abc9c, #16a085);
+    border-radius: 15px;
+    transition: all 0.3s ease; /* ઈફેક્ટને સ્મૂથ બનાવવા */
+    border: 2px solid #eee;  /* હળવી બોર્ડર */
+}
+
+/* હોવર ઈફેક્ટ - સેન્ટરમાં જ રહેશે પણ લુક બદલાશે */
+.about-brief:hover {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* હળવો પડછાયો આવશે */
+    border-color: #27ae60;                   /* બોર્ડર ગ્રીન થશે */
+    background: linear-gradient(-45deg, #2ecc71, #27ae60, #1abc9c, #16a085);                   /* કલર થોડો બદલાશે */
+}
+
+.about-brief h2 {
+    color: #ffffff;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.about-brief p {
+    color: #555;
+    line-height: 1.8;
+    font-size: 1.1rem;
+}

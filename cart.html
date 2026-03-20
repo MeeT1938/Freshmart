@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Your Cart - FreshMart</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Checkout Box Styling */
+        .checkout-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .input-group input, .input-group textarea {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;
+        }
+        
+        /* Payment Selection */
+        .payment-methods { margin: 20px 0; display: flex; gap: 15px; align-items: center; }
+        
+        /* Checkout Button Hover Effect */
+        .checkout-btn {
+            background: #27ae60; color: white; border: none; padding: 15px 40px;
+            font-size: 1.2rem; font-weight: bold; border-radius: 50px; cursor: pointer;
+            transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        .checkout-btn:hover {
+            background: #219150; transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.5);
+        }
+
+        /* Success Popup styling */
+        #successPopup {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; padding: 40px; border-radius: 20px; text-align: center;
+            box-shadow: 0 0 100px rgba(0,0,0,0.5); z-index: 2000; width: 350px;
+        }
+        #successPopup i { font-size: 4rem; color: #27ae60; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><h1><i class="fa-solid fa-basket-shopping"></i> FreshMart</h1></div>
+    <nav><a href="index.html">Home</a><a href="products.html">Products</a><a href="cart.html">Cart</a></nav>
+</header>
+
+<div class="main-container">
+    <div class="cart-area" style="width: 100%; max-width: 800px; margin: 0 auto;">
+        <h2 style="margin-bottom: 20px;"><i class="fa-solid fa-cart-shopping"></i> Shopping Cart</h2>
+        <table id="cartTable"></table>
+        
+        <div style="margin-top: 20px; text-align: right;">
+            <h2 id="cartTotal">Total: ₹0</h2>
+        </div>
+
+        <div class="checkout-form">
+            <h3><i class="fa-solid fa-truck"></i> Delivery Details</h3>
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="userName" placeholder="Enter your name">
+            </div>
+            <div class="input-group">
+                <label>Delivery Address</label>
+                <textarea id="userAddress" rows="3" placeholder="Enter your full address"></textarea>
+            </div>
+            
+            <h3><i class="fa-solid fa-credit-card"></i> Payment Method</h3>
+            <div class="payment-methods">
+                <input type="radio" name="pay" id="upi" checked> <label for="upi">UPI / Google Pay</label>
+                <input type="radio" name="pay" id="cod"> <label for="cod">Cash on Delivery</label>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="checkout-btn" onclick="processOrder()">Confirm & Pay Now</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="successPopup">
+    <i class="fa-solid fa-circle-check"></i>
+    <h2 style="color: #27ae60;">Order Success!</h2>
+    <p style="margin: 15px 0; color: #666;">Thank you, <span id="displayUserName"></span>!<br>Your fresh items are on the way.</p>
+    <p style="font-size: 0.8rem; color: #999;">Redirecting to home in 5 seconds...</p>
+</div>
+
+<script src="script.js"></script>
+<script>
+    function processOrder() {
+        const name = document.getElementById('userName').value;
+        const address = document.getElementById('userAddress').value;
+        const totalAmount = document.getElementById('cartTotal').innerText; // આનાથી ટોટલ રૂપિયા મળશે
+        
+        // કાર્ટમાંથી આઈટમ્સ લેવી (જો કાર્ટ ખાલી હોય તો ઓર્ડર ન થાય)
+        const cartItems = JSON.parse(localStorage.getItem('fmart_cart')) || [];
+
+        if(name === "" || address === "") {
+            alert("Please fill your Name and Address!");
+            return;
+        }
+
+        if(cartItems.length === 0) {
+            alert("તમારું કાર્ટ ખાલી છે!");
+            return;
+        }
+
+        // ૧. આઈટમ્સના નામ ભેગા કરવા (એડમિનમાં બતાવવા માટે)
+        const itemNames = cartItems.map(item => item.name).join(", ");
+
+        // ૨. નવો ઓર્ડર ઓબ્જેક્ટ બનાવવો
+        const newOrder = {
+            id: "#" + Math.floor(1000 + Math.random() * 9000), // રેન્ડમ ઓર્ડર આઈડી
+            name: name,
+            items: itemNames,
+            total: totalAmount,
+            status: "Pending"
+        };
+
+        // ૩. એડમિન ઓર્ડર્સની જૂની લિસ્ટ લાવવી
+        let adminOrders = JSON.parse(localStorage.getItem('adminOrders')) || [];
+
+        // ૪. નવો ઓર્ડર લિસ્ટમાં ઉમેરવો
+        adminOrders.push(newOrder);
+
+        // ૫. LocalStorage માં પાછું સેવ કરવું
+        localStorage.setItem('adminOrders', JSON.stringify(adminOrders));
+
+        // સક્સેસ પોપઅપ બતાવવું
+        document.getElementById('displayUserName').innerText = name;
+        document.getElementById('successPopup').style.display = 'block';
+
+        // કાર્ટ ખાલી કરી નાખવું
+        localStorage.removeItem('fmart_cart');
+
+        // ૫ સેકન્ડ પછી હોમ પેજ પર રિડાયરેક્ટ
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 5000);
+    }
+</script>
+
+</body>
+</html>

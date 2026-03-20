@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshMart - Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-body">
+
+<div class="admin-container">
+    <aside class="admin-sidebar">
+        <h2>FreshMart Admin</h2>
+        <ul>
+            <li onclick="showTab('add-product')" id="li-add" class="active"><i class="fa-solid fa-plus"></i> Add Products</li>
+            <li onclick="showTab('view-orders')" id="li-view"><i class="fa-solid fa-cart-shopping"></i> View Orders</li>
+            <li onclick="showTab('manage-users')" id="li-users"><i class="fa-solid fa-users"></i> User Problems</li>
+            <li onclick="window.location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-house"></i> View Site</li>
+            <li onclick="logoutAdmin()" style="background: #c0392b; margin-top: 20px; cursor: pointer;"><i class="fa-solid fa-right-from-bracket"></i> Logout</li>
+        </ul>
+    </aside>
+
+    <main class="admin-main">
+        <section id="add-product" class="admin-tab-content active">
+            <h1>Dashboard - Add New Product</h1>
+            <div class="admin-form-section">
+                <form id="productForm">
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" id="pName" placeholder="e.g. Fresh Apple" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (₹)</label>
+                        <input type="number" id="pPrice" placeholder="e.g. 120" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="pCategory">
+                            <option value="grain">Grains & Pulses</option>
+                            <option value="dairy">Dairy & Bakery</option>
+                            <option value="snack">Snacks & Drinks</option>
+                            <option value="daily">Daily Essentials</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Image Name</label>
+                        <input type="text" id="pImage" placeholder="e.g. apple.jpg" required>
+                    </div>
+                    <button type="submit" class="admin-btn">Add Product to Store</button>
+                </form>
+            </div>
+
+            <div class="admin-table-section">
+                <h2>Current Inventory</h2>
+                <table>
+                    <thead>
+                        <tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Action</th></tr>
+                    </thead>
+                    <tbody id="adminProductList"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="view-orders" class="admin-tab-content">
+            <h1>Customer Orders</h1>
+            <div class="admin-table-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer Name</th>
+                            <th>Items</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderList"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="manage-users" class="admin-tab-content">
+            <h1>Customer Support & Problems</h1>
+            <div class="admin-table-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Email</th>
+                            <th>Reported Problem</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="problemList"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    // 1. Security Check (સૌથી પહેલા)
+    if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
+        window.location.href = "login.html";
+    }
+
+    // 2. Initial Data Definition
+    const initialOrders = [
+        { id: "#1001", name: "Kapil P Damahe", items: "Basmati Rice, Milk", total: "₹516", status: "Pending" },
+        { id: "#1002", name: "Meet Purohit", items: "Amul Butter, Bread", total: "₹110", status: "Pending" }
+    ];
+
+    const initialProblems = [
+        { name: "Rahul Sharma", email: "rahul@mail.com", problem: "Item not delivered yet", status: "Unsolved" },
+        { name: "Sneha Patel", email: "sneha@mail.com", problem: "Received damaged product", status: "Unsolved" }
+    ];
+
+    // 3. Logout Function
+ function logoutAdmin() {
+    localStorage.removeItem('isAdminLoggedIn'); // લોગિન ડેટા ક્લીન કરો
+    window.location.href = "index.html"; // લોગિન પેજના બદલે હોમ પેજ પર મોકલો
+}
+
+    window.onload = function() {
+        if (!localStorage.getItem('adminOrders')) {
+            localStorage.setItem('adminOrders', JSON.stringify(initialOrders));
+        }
+        if (!localStorage.getItem('userProblems')) {
+            localStorage.setItem('userProblems', JSON.stringify(initialProblems));
+        }
+        renderOrders();
+        renderProblems();
+    };
+
+    function showTab(tabId) {
+        document.querySelectorAll('.admin-tab-content').forEach(section => section.classList.remove('active'));
+        document.querySelectorAll('.admin-sidebar li').forEach(li => li.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        
+        if(tabId === 'add-product') document.getElementById('li-add').classList.add('active');
+        if(tabId === 'view-orders') document.getElementById('li-view').classList.add('active');
+        if(tabId === 'manage-users') document.getElementById('li-users').classList.add('active');
+    }
+
+    function renderOrders() {
+        const orders = JSON.parse(localStorage.getItem('adminOrders')) || [];
+        const orderList = document.getElementById('orderList');
+        orderList.innerHTML = '';
+        orders.forEach((order, index) => {
+            const statusClass = order.status === 'Delivered' ? 'status-delivered' : 'status-pending';
+            const btnHide = order.status === 'Delivered' ? 'style="display:none"' : '';
+            orderList.innerHTML += `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.name}</td>
+                    <td>${order.items}</td>
+                    <td>${order.total}</td>
+                    <td><span class="${statusClass}">${order.status}</span></td>
+                    <td><button class="status-btn" ${btnHide} onclick="markDelivered(${index})">Mark Delivered</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    function markDelivered(index) {
+        let orders = JSON.parse(localStorage.getItem('adminOrders'));
+        orders[index].status = 'Delivered';
+        localStorage.setItem('adminOrders', JSON.stringify(orders));
+        renderOrders();
+    }
+
+    function renderProblems() {
+        const problems = JSON.parse(localStorage.getItem('userProblems')) || [];
+        const problemList = document.getElementById('problemList');
+        problemList.innerHTML = '';
+        problems.forEach((prob, index) => {
+            const statusClass = prob.status === 'Solved' ? 'status-delivered' : 'status-pending';
+            const btnHide = prob.status === 'Solved' ? 'style="display:none"' : '';
+            problemList.innerHTML += `
+                <tr>
+                    <td>${prob.name}</td>
+                    <td>${prob.email}</td>
+                    <td><i>"${prob.problem}"</i></td>
+                    <td><span class="${statusClass}">${prob.status}</span></td>
+                    <td><button class="status-btn" ${btnHide} onclick="solveProblem(${index})">Mark Solved</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    function solveProblem(index) {
+        let problems = JSON.parse(localStorage.getItem('userProblems'));
+        problems[index].status = 'Solved';
+        localStorage.setItem('userProblems', JSON.stringify(problems));
+        renderProblems();
+    }
+
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const table = document.getElementById('adminProductList');
+        const row = `
+            <tr>
+                <td><img src="images/${document.getElementById('pImage').value}" width="40" onerror="this.src='https://via.placeholder.com/40'"></td>
+                <td>${document.getElementById('pName').value}</td>
+                <td>${document.getElementById('pCategory').value}</td>
+                <td>₹${document.getElementById('pPrice').value}</td>
+                <td><button onclick="this.parentElement.parentElement.remove()" style="background:red; color:white; border:none; padding:5px; border-radius:5px; cursor:pointer;">Delete</button></td>
+            </tr>
+        `;
+        table.innerHTML += row;
+        this.reset();
+    });
+</script>
+</body>
+</html>

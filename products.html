@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshMart - Products</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <div class="logo"><h1><i class="fa-solid fa-basket-shopping"></i> FreshMart</h1></div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html" style="color: var(--primary-color);">Products</a>
+        <a href="cart.html">Cart</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<div style="text-align: center; padding: 40px 20px;">
+    <h1 style="font-size: 2.5rem; color: var(--dark-blue);">Our Fresh Collection</h1>
+    <p style="color: #666;">Choose from our wide range of organic products</p>
+</div>
+
+<div class="main-container">
+    <aside class="sidebar">
+        <h3>Categories</h3>
+        <button onclick="filter('all')">All Products</button>
+        <button onclick="filter('grain')">Grains & Pulses</button>
+        <button onclick="filter('dairy')">Dairy & Bakery</button>
+        <button onclick="filter('snack')">Snacks & Drinks</button>
+        <button onclick="filter('daily')">Daily Essentials</button>
+    </aside>
+
+    <section class="products-grid" id="productList">
+        </section>
+</div>
+
+<footer>
+    <p>&copy; 2026 FreshMart | College Project by Meet Purohit</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
